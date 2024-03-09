@@ -34,7 +34,7 @@ public class LoggerAspects {
 	
 	@AfterThrowing(value = "execution(* com.techamp.schoolmanagement..*.*(..))", throwing = "ex")
 	public void logException(JoinPoint joinPoint, Exception ex) {
-		log.info("********************* EXCEPTION ********************** ");
-		log.error(joinPoint.getSignature().toString() + "An exception occured due to : " + ex.getMessage());
+		log.info("--------------------- EXCEPTION ---------------------- ");
+		log.error(joinPoint.getSignature().toString() + " An exception occured due to : " + ex.getMessage());
 	}
 }

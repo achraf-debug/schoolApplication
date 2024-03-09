@@ -1,17 +1,24 @@
 package com.techamp.schoolmanagement.model;
 
 
+import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 @Getter
 @Setter
 @Builder
+@Entity
+@Table(name = "contact_msg")
 public class ContactMessage extends BaseEntity {
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
+	@GenericGenerator(name = "native", strategy = "native")
+	@Column(name = "contact_id")
 	private Long contactId;
 	
 	@NotBlank(message = "Name must not be blank")
@@ -33,6 +40,4 @@ public class ContactMessage extends BaseEntity {
 	private String message;
 	
 	private String status;
-	
-	// Getters and setters
 }

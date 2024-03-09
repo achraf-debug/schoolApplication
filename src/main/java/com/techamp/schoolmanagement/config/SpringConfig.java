@@ -9,6 +9,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
@@ -32,11 +34,17 @@ public class SpringConfig  {
 		MvcRequestMatcher.Builder mvcMatcherBuilder = new MvcRequestMatcher.Builder(introspector);
 		
 		http.csrf((csrf) -> csrf.ignoringRequestMatchers(mvcMatcherBuilder.pattern("/saveMsg"))
+		.ignoringRequestMatchers(mvcMatcherBuilder.pattern("/public/**"))
 		.ignoringRequestMatchers(PathRequest.toH2Console()))
 		.authorizeHttpRequests((requests) -> requests.requestMatchers(mvcMatcherBuilder.pattern("/dashboard")).authenticated()
 		.requestMatchers(mvcMatcherBuilder.pattern("/displayMessages")).hasRole("ADMIN")
 		.requestMatchers(mvcMatcherBuilder.pattern("/closeMsg/**")).hasRole("ADMIN")
+		.requestMatchers(mvcMatcherBuilder.pattern("/admin/**")).hasRole("ADMIN")
+		.requestMatchers(mvcMatcherBuilder.pattern("/student/**")).hasRole("STUDENT")
 		.requestMatchers(mvcMatcherBuilder.pattern("")).permitAll()
+		.requestMatchers("/displayProfile").authenticated()
+		.requestMatchers("/updateProfile").authenticated()
+		.requestMatchers(mvcMatcherBuilder.pattern("/public/**")).permitAll()
 		.requestMatchers(mvcMatcherBuilder.pattern("/")).permitAll()
 		.requestMatchers(mvcMatcherBuilder.pattern("/home")).permitAll()
 		.requestMatchers(mvcMatcherBuilder.pattern("/holidays/**")).permitAll()
@@ -60,6 +68,11 @@ public class SpringConfig  {
 		return http.build();
 	}
 	
+	
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 	@Bean
 	public InMemoryUserDetailsManager userDetailsService() {
 		

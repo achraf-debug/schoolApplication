@@ -1,0 +1,12 @@
+package com.techamp.schoolmanagement.repositories;
+
+import com.techamp.schoolmanagement.model.Holiday;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface HolidayRepository extends JpaRepository<Holiday, Long> {
+	List<Holiday> findHolidayByType(Holiday.Type type);
+}
